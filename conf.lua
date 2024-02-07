@@ -1,3 +1,3 @@
 function love.conf(t)
-   t.window.borderless = true 
+   t.version = "11.5"
 end
