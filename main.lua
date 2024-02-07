@@ -9,6 +9,7 @@ local cursor = {
 local lineHeight
 
 function love.load()
+  love.graphics.setNewFont("JetBrainsMono-Regular.ttf", 14)
   lineHeight = love.graphics.getFont():getHeight()
   love.keyboard.setKeyRepeat(true)
   text = { n = 4, "hey, this is the first line", "and this is the second", "this the third", "table" }
