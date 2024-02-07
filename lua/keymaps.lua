@@ -48,5 +48,11 @@ return {
                 cursor.pos = text[cursor.line]:len()
             end
         end
+    end,
+    ["end"] = function(cursor, text)
+        cursor.pos = text[cursor.line]:len()
+    end,
+    home = function(cursor, _)
+        cursor.pos = 0
     end
 }
