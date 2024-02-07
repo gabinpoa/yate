@@ -54,5 +54,16 @@ return {
     end,
     home = function(cursor, _)
         cursor.pos = 0
+    end,
+    ["return"] = function(cursor, text)
+        local newLineText = ""
+        if cursor.pos < text[cursor.line]:len() then
+            newLineText = text[cursor.line]:sub(cursor.pos + 1, text[cursor.line]:len())
+            text[cursor.line] = text[cursor.line]:sub(1, cursor.pos)
+        end
+        table.insert(text, cursor.line + 1, newLineText)
+        cursor.line = cursor.line + 1
+        cursor.pos = 0
+        text.n = text.n + 1
     end
 }
