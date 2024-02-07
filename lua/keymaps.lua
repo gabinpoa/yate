@@ -8,10 +8,13 @@ return {
             cursor.pos = 0
             text[cursor.line] = ""
         elseif cursor.pos == 0 and cursor.line - 1 > 0 then
+            cursor.pos = text[cursor.line - 1]:len()
+            if text[cursor.line]:len() > 0 then
+                text[cursor.line - 1] = text[cursor.line - 1] .. text[cursor.line]
+            end
             table.remove(text, cursor.line)
             text.n = text.n - 1
             cursor.line = cursor.line - 1
-            cursor.pos = text[cursor.line]:len()
         end
     end,
     left = function(cursor, text)
