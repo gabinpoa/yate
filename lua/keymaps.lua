@@ -5,8 +5,12 @@ return {
             text[cursor.line] = text[cursor.line]:sub(1, cursor.pos) ..
                 text[cursor.line]:sub(cursor.pos + 2, text[cursor.line]:len())
         elseif cursor.pos == 1 then
+            local lineTextAfterRemove = ""
+            if text[cursor.line]:len() > 0 then
+                lineTextAfterRemove = text[cursor.line]:sub(cursor.pos + 1, text[cursor.line]:len())
+            end
             cursor.pos = 0
-            text[cursor.line] = ""
+            text[cursor.line] = lineTextAfterRemove
         elseif cursor.pos == 0 and cursor.line - 1 > 0 then
             cursor.pos = text[cursor.line - 1]:len()
             if text[cursor.line]:len() > 0 then
