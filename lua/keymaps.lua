@@ -34,7 +34,11 @@ function keymaps.left(cursor, txt)
 end
 
 function keymaps.right(cursor, txt)
-    if cursor.pos + 1 > lineLen(cursor, txt) and cursor.line + 1 <= txt.n then
+    if love.keyboard.isDown("lshift") then
+            cursor.selStart.pos = cursor.pos + 1
+            cursor.selStart.line = cursor.line
+    end
+    if cursor.pos + 1 > lineLen(cursor, txt) and cursor.line + 1 <= txt.n then    
         cursor.pos = 0
         cursor.line = cursor.line + 1
     elseif cursor.pos + 1 <= lineLen(cursor, txt) then
