@@ -11,8 +11,8 @@ function love.load()
     padding = 10
     text = {n = 4, "hey, this is the first line", "and this is the second", "this the third", "table"}
     cursor = {
-        line = text.n,
-        pos = text[text.n]:len(),
+        line = 1,
+        pos = 1,
         x = 0,
         y = 0,
         selStart = {
