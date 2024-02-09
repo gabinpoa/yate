@@ -1,4 +1,3 @@
-require "coreFunctions"
 local game = require "gameobj"
 local keymaps = {}
 
