@@ -1,87 +1,87 @@
 require "lua.coreFunctions"
 keymaps = {}
 
-function keymaps.backspace (cursor, txt)
+function keymaps.backspace ()
     if cursor.pos - 1 > 0 then
         cursor.pos = cursor.pos - 1
-        txt[cursor.line] = txt[cursor.line]:sub(1, cursor.pos) ..
-        txt[cursor.line]:sub(cursor.pos + 2, lineLen(cursor, txt))
+        text[cursor.line] = text[cursor.line]:sub(1, cursor.pos) ..
+        text[cursor.line]:sub(cursor.pos + 2, lineLen(cursor, text))
     elseif cursor.pos == 1 then
         local lineTextAfterRemove = ""
-        if lineLen(cursor, txt) > 0 then
-            lineTextAfterRemove = txt[cursor.line]:sub(cursor.pos + 1, lineLen(cursor, txt))
+        if lineLen(cursor, text) > 0 then
+            lineTextAfterRemove = text[cursor.line]:sub(cursor.pos + 1, lineLen(cursor, text))
         end
         cursor.pos = 0
-        txt[cursor.line] = lineTextAfterRemove
+        text[cursor.line] = lineTextAfterRemove
     elseif cursor.pos == 0 and cursor.line - 1 > 0 then
-        cursor.pos = txt[cursor.line - 1]:len()
-        if lineLen(cursor, txt) > 0 then
-            txt[cursor.line - 1] = txt[cursor.line - 1] .. txt[cursor.line]
+        cursor.pos = text[cursor.line - 1]:len()
+        if lineLen(cursor, text) > 0 then
+            text[cursor.line - 1] = text[cursor.line - 1] .. text[cursor.line]
         end
-        table.remove(txt, cursor.line)
-        txt.n = txt.n - 1
+        table.remove(text, cursor.line)
+        text.n = text.n - 1
         cursor.line = cursor.line - 1
     end
 end
 
-function keymaps.left(cursor, txt)
+function keymaps.left()
     if cursor.pos - 1 < 0 and cursor.line - 1 > 0 then
         cursor.line = cursor.line - 1
-        cursor.pos = lineLen(cursor, txt)
+        cursor.pos = lineLen(cursor, text)
     elseif cursor.pos - 1 >= 0 then
         cursor.pos = cursor.pos - 1
     end
 end
 
-function keymaps.right(cursor, txt)
+function keymaps.right()
     if love.keyboard.isDown("lshift") then
             cursor.selStart.pos = cursor.pos + 1
             cursor.selStart.line = cursor.line
     end
-    if cursor.pos + 1 > lineLen(cursor, txt) and cursor.line + 1 <= txt.n then    
+    if cursor.pos + 1 > lineLen(cursor, text) and cursor.line + 1 <= text.n then    
         cursor.pos = 0
         cursor.line = cursor.line + 1
-    elseif cursor.pos + 1 <= lineLen(cursor, txt) then
+    elseif cursor.pos + 1 <= lineLen(cursor, text) then
         cursor.pos = cursor.pos + 1
     end
 end
 
-function keymaps.up(cursor, txt)
+function keymaps.up()
     if cursor.line - 1 > 0 then
         cursor.line = cursor.line - 1
-        if cursor.pos > lineLen(cursor, txt) then
-            cursor.pos = lineLen(cursor, txt)
+        if cursor.pos > lineLen(cursor, text) then
+            cursor.pos = lineLen(cursor, text)
         end
     end
 end
 
-function keymaps.down(cursor, txt)
-    if cursor.line + 1 <= txt.n then
+function keymaps.down()
+    if cursor.line + 1 <= text.n then
         cursor.line = cursor.line + 1
-        if cursor.pos > lineLen(cursor, txt) then
-            cursor.pos = lineLen(cursor, txt)
+        if cursor.pos > lineLen(cursor, text) then
+            cursor.pos = lineLen(cursor, text)
         end
     end
 end
 
-keymaps["end"] = function (cursor, txt)
-    cursor.pos = lineLen(cursor, txt)
+keymaps["end"] = function ()
+    cursor.pos = lineLen(cursor, text)
 end
 
-function keymaps.home(cursor, _)
+function keymaps.home()
     cursor.pos = 0
 end
 
-keymaps["return"] = function(cursor, txt)
+keymaps["return"] = function()
     local newLineText = ""
-    if cursor.pos < lineLen(cursor, txt) then
-        newLineText = txt[cursor.line]:sub(cursor.pos + 1, lineLen(cursor, txt))
-        txt[cursor.line] = txt[cursor.line]:sub(1, cursor.pos)
+    if cursor.pos < lineLen(cursor, text) then
+        newLineText = text[cursor.line]:sub(cursor.pos + 1, lineLen(cursor, text))
+        text[cursor.line] = text[cursor.line]:sub(1, cursor.pos)
     end
-    table.insert(txt, cursor.line + 1, newLineText)
+    table.insert(text, cursor.line + 1, newLineText)
     cursor.line = cursor.line + 1
     cursor.pos = 0
-    txt.n = txt.n + 1
+    text.n = text.n + 1
 end
 
 return keymaps

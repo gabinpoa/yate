@@ -1,25 +1,21 @@
 ---@diagnostic disable: duplicate-set-field
 _G.love = require "love"
 local keymaps = require "lua.keymaps"
-local text = {""}
-local cursor = {
-    line = 1,
-    pos = 1,
-}
-local lineHeight
 local padding = 10
 
 function love.load()
     love.graphics.setNewFont("JetBrainsMono-Regular.ttf", 14)
     lineHeight = love.graphics.getFont():getHeight()
     love.keyboard.setKeyRepeat(true)
-    text = {n = 4, "hey, this is the first line", "and this is the second", "this the third", "table"}
 
-    cursor.line = text.n
-    cursor.pos = text[text.n]:len()
-    cursor.selStart = {
-        line = nil,
-        pos = nil
+    text = {n = 4, "hey, this is the first line", "and this is the second", "this the third", "table"}
+    cursor = {
+        line = text.n,
+        pos = text[text.n]:len(),
+        selStart = {
+            pos = nil,
+            line = nil
+        }
     }
 end
 
