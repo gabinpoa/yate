@@ -2,13 +2,13 @@
 _G.love = require "love"
 require "lua.coreFunctions"
 local keymaps = require "lua.keymaps"
-local padding = 10
 
 function love.load()
     love.graphics.setNewFont("JetBrainsMono-Regular.ttf", 14)
     lineHeight = love.graphics.getFont():getHeight()
     love.keyboard.setKeyRepeat(true)
 
+    padding = 10
     text = {n = 4, "hey, this is the first line", "and this is the second", "this the third", "table"}
     cursor = {
         line = text.n,
