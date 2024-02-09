@@ -30,7 +30,7 @@ function love.draw()
     love.graphics.line(cursor.x, cursor.y, cursor.x, cursor.y + lineHeight)
     if cursor.selStart.pos ~= nil then
         love.graphics.setColor(0, 0, 255, 0.4)
-        love.graphics.rectangle("fill", love.graphics.getFont():getWidth(text[cursor.selStart.line]:sub(1, cursor.selStart.pos)), (cursor.selStart.line - 1) * lineHeight + padding, cursor.x - love.graphics.getFont():getWidth(text[cursor.selStart.line]:sub(1, cursor.selStart.pos)), lineHeight)
+        love.graphics.rectangle("fill", selectStartX(), (cursor.selStart.line - 1) * lineHeight + padding, cursor.x - selectStartX(), lineHeight)
     end
 end
 
