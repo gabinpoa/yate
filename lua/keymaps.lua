@@ -1,11 +1,11 @@
 require "lua.coreFunctions"
 keymaps = {}
 
-function keymaps.backspace ()
+function keymaps.backspace()
     if cursor.pos - 1 > 0 then
         cursor.pos = cursor.pos - 1
         text[cursor.line] = text[cursor.line]:sub(1, cursor.pos) ..
-        text[cursor.line]:sub(cursor.pos + 2, lineLen(cursor.line))
+            text[cursor.line]:sub(cursor.pos + 2, lineLen(cursor.line))
     elseif cursor.pos == 1 then
         local lineTextAfterRemove = ""
         if lineLen(cursor.line) > 0 then
@@ -35,10 +35,10 @@ end
 
 function keymaps.right()
     if love.keyboard.isDown("lshift") then
-            cursor.selStart.pos = cursor.pos
-            cursor.selStart.line = cursor.line
+        cursor.selStart.pos = cursor.pos
+        cursor.selStart.line = cursor.line
     end
-    if cursor.pos + 1 > lineLen(cursor.line) and cursor.line + 1 <= text.n then    
+    if cursor.pos + 1 > lineLen(cursor.line) and cursor.line + 1 <= text.n then
         cursor.pos = 0
         cursor.line = cursor.line + 1
     elseif cursor.pos + 1 <= lineLen(cursor.line) then
@@ -64,7 +64,7 @@ function keymaps.down()
     end
 end
 
-keymaps["end"] = function ()
+keymaps["end"] = function()
     cursor.pos = lineLen(cursor.line)
 end
 
@@ -85,3 +85,4 @@ keymaps["return"] = function()
 end
 
 return keymaps
+
