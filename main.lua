@@ -1,5 +1,6 @@
 ---@diagnostic disable: duplicate-set-field
 _G.love = require "love"
+require "lua.coreFunctions"
 local keymaps = require "lua.keymaps"
 local padding = 10
 
@@ -22,7 +23,7 @@ end
 function love.draw()
     love.graphics.setColor(255, 255, 255)
     love.graphics.print(table.concat(text, "\n"), padding, padding)
-    cursor.x = love.graphics.getFont():getWidth(text[cursor.line]:sub(1, cursor.pos)) + padding
+    cursor.x = currCursorX() + padding
     cursor.y = (cursor.line - 1) * lineHeight + padding
     love.graphics.line(cursor.x, cursor.y, cursor.x, cursor.y + lineHeight)
     if cursor.selStart.pos ~= nil then
