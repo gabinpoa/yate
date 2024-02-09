@@ -13,6 +13,8 @@ function love.load()
     cursor = {
         line = text.n,
         pos = text[text.n]:len(),
+        x = 0,
+        y = 0,
         selStart = {
             pos = nil,
             line = nil
