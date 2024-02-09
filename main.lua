@@ -23,7 +23,7 @@ end
 function love.draw()
     love.graphics.setColor(255, 255, 255)
     love.graphics.print(table.concat(text, "\n"), padding, padding)
-    cursor.x = currCursorX() + padding
+    cursor.x = currCursorX()
     cursor.y = (cursor.line - 1) * lineHeight + padding
     love.graphics.line(cursor.x, cursor.y, cursor.x, cursor.y + lineHeight)
     if cursor.selStart.pos ~= nil then
