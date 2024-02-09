@@ -7,5 +7,5 @@ function currCursorX()
 end
 
 function selectStartX()
-	return love.graphics.getFont():getWidth(text[cursor.selStart.line]:sub(1, cursor.selStart.pos))
+	return love.graphics.getFont():getWidth(text[cursor.selStart.line]:sub(1, cursor.selStart.pos)) + padding
 end
