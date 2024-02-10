@@ -16,6 +16,10 @@ function love.draw()
     love.graphics.line(game.cursor.x, game.cursor.y, game.cursor.x, game.cursor.y + game.lineHeight)
 end
 
+function love.textinput(char)
+    game:insertCharacter(char)
+end
+
 function love.keypressed(key)
     if keymaps[key] ~= nil then
         keymaps[key]()

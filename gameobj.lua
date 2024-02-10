@@ -98,4 +98,13 @@ function game:addNewLine()
     self:updateXYAxis()
 end
 
+function game:insertCharacter(char)
+    local originalText = self:getCurrLineText()
+    local newText = originalText:sub(0, self.cursor.pos) .. char .. originalText:sub(self.cursor.pos + 1)
+
+    self.txt[self.cursor.line] = newText
+    self.cursor.pos = self.cursor.pos + 1
+    self:updateXYAxis()
+end
+
 return game
