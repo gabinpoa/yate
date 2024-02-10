@@ -14,6 +14,11 @@ function love.draw()
     love.graphics.setColor(255, 255, 255)
     love.graphics.print(table.concat(game.txt, "\n"), game.padding, game.padding)
     love.graphics.line(game.cursor.x, game.cursor.y, game.cursor.x, game.cursor.y + game.lineHeight)
+    if game.cursor.selStart.pos then
+        love.graphics.setColor(0, 0, 255, 0.4)
+        love.graphics.rectangle("fill", game.cursor.selStart.x, game.cursor.selStart.y,
+            game.cursor.x - game.cursor.selStart.x, game.lineHeight + 2)
+    end
 end
 
 function love.textinput(char)

@@ -7,6 +7,8 @@ local game = {
         selStart = {
             pos = nil,
             line = nil,
+            x = 0,
+            y = 0,
         },
     },
     txt = {
@@ -22,7 +24,7 @@ function game:getCurrLineText()
 end
 
 function game:getCursorX()
-    return love.graphics.getFont():getWidth(self.txt[self.cursor.line]:sub(1, self.cursor.pos)) + self.padding
+    return love.graphics.getFont():getWidth(self.txt[self.cursor.line]:sub(0, self.cursor.pos)) + self.padding
 end
 
 function game:getCursorY()
@@ -105,6 +107,22 @@ function game:insertCharacter(char)
     self.txt[self.cursor.line] = newText
     self.cursor.pos = self.cursor.pos + 1
     self:updateXYAxis()
+end
+
+function game:getSelectStartX()
+    return love.graphics.getFont():getWidth(self:getCurrLineText():sub(0, self.cursor.selStart.pos)) + self.padding
+end
+
+function game:getSelectStartY()
+    return (self.cursor.selStart.line - 1) * self.lineHeight + self.padding
+end
+
+function game:initSelect()
+    self.cursor.selStart.pos = self.cursor.pos
+    self.cursor.selStart.line = self.cursor.line
+
+    self.cursor.selStart.x = self:getSelectStartX()
+    self.cursor.selStart.y = self:getSelectStartY()
 end
 
 return game
