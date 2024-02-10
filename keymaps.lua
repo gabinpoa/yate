@@ -6,35 +6,35 @@ function keymaps.backspace()
 end
 
 function keymaps.left()
-    if love.keyboard.isDown("lshift") then
+    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
         game:initSelect()
     end
     game:setCursorPos(-1)
 end
 
 function keymaps.right()
-    if love.keyboard.isDown("lshift") then
+    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
         game:initSelect()
     end
     game:setCursorPos(1)
 end
 
 function keymaps.up()
-    if love.keyboard.isDown("lshift") then
+    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
         game:initSelect()
     end
     game:setCursorLine(-1)
 end
 
 function keymaps.down()
-    if love.keyboard.isDown("lshift") then
+    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
         game:initSelect()
     end
     game:setCursorLine(1)
 end
 
 keymaps["end"] = function()
-    if love.keyboard.isDown("lshift") then
+    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
         game:initSelect()
     end
     game.cursor.pos = game:currLineLen()
@@ -42,7 +42,7 @@ keymaps["end"] = function()
 end
 
 function keymaps.home()
-    if love.keyboard.isDown("lshift") then
+    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
         game:initSelect()
     end
     game.cursor.pos = 0

@@ -125,4 +125,9 @@ function game:initSelect()
     self.cursor.selStart.y = self:getSelectStartY()
 end
 
+function game:exitSelect()
+    self.cursor.selStart.pos = nil
+    self.cursor.selStart.line = nil
+end
+
 return game
