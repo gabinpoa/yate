@@ -1,46 +1,32 @@
-require "lua.coreFunctions"
-local keymaps = require "lua.keymaps"
+local game = require "gameobj"
+local keymaps = require "keymaps"
 
 function love.load()
-    love.graphics.setNewFont("JetBrainsMono-Regular.ttf", 14)
-    lineHeight = love.graphics.getFont():getHeight()
     love.keyboard.setKeyRepeat(true)
+    love.graphics.setNewFont("JetBrainsMono-Regular.ttf", 14)
 
-    padding = 10
-    text = { n = 4, "hey, this is the first line", "and this is the second", "this the third", "table" }
-    cursor = {
-        line = 1,
-        pos = 1,
-        x = 0,
-        y = 0,
-        selStart = {
-            pos = nil,
-            line = nil
-        }
-    }
+    game.lineHeight = love.graphics.getFont():getHeight()
+    game.padding = 12
+    game:updateXYAxis()
 end
 
 function love.draw()
     love.graphics.setColor(255, 255, 255)
-    love.graphics.print(table.concat(text, "\n"), padding, padding)
-    cursor.x = currCursorX()
-    cursor.y = (cursor.line - 1) * lineHeight + padding
-    love.graphics.line(cursor.x, cursor.y, cursor.x, cursor.y + lineHeight)
-    if cursor.selStart.pos ~= nil then
+    love.graphics.print(table.concat(game.txt, "\n"), game.padding, game.padding)
+    love.graphics.line(game.cursor.x, game.cursor.y, game.cursor.x, game.cursor.y + game.lineHeight)
+    if game.cursor.selStart.pos then
         love.graphics.setColor(0, 0, 255, 0.4)
-        love.graphics.rectangle("fill", selectStartX(), (cursor.selStart.line - 1) * lineHeight + padding,
-            cursor.x - selectStartX(), lineHeight)
+        love.graphics.rectangle("fill", game.cursor.selStart.x, game.cursor.selStart.y,
+            game.cursor.x - game.cursor.selStart.x, game.lineHeight + 2)
     end
 end
 
-function love.textinput(t)
-    text[cursor.line] = text[cursor.line]:sub(1, cursor.pos) ..
-        t .. text[cursor.line]:sub(cursor.pos + 1, text[cursor.line]:len())
-    cursor.pos = cursor.pos + 1
+function love.textinput(char)
+    game:insertCharacter(char)
 end
 
 function love.keypressed(key)
     if keymaps[key] ~= nil then
-        keymaps[key](cursor, text)
+        keymaps[key]()
     end
 end
