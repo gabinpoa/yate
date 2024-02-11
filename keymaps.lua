@@ -49,10 +49,4 @@ keymaps["return"] = function()
     game:addNewLine()
 end
 
--- only change mode
-
-function keymaps.escape()
-    game:exitSelect()
-end
-
 return keymaps

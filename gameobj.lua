@@ -6,7 +6,6 @@ local game = {
         y = 0,
     },
     selection = {
-        isMovingSelect = false,
         start = {
             pos = nil,
             line = nil,
@@ -137,17 +136,11 @@ function game:updateSelectionEnd()
 end
 
 function game:initSelect()
-    self.selection.isMovingSelect = true
-
     self.selection.start.pos = self.cursor.pos
     self.selection.start.line = self.cursor.line
 
     self.selection.start.x = self:getSelectionX("start")
     self.selection.start.y = self:getSelectionY("start")
-end
-
-function game:stopSelect()
-    self.selection.isMovingSelect = false
 end
 
 function game:exitSelect()
@@ -163,6 +156,7 @@ function game:removeSelected()
     if self.selection.start.pos < self.selection.closing.pos then
         newText = originalText:sub(0, self.selection.start.pos) ..
             originalText:sub(self.selection.closing.pos + 1)
+
         self:updateCursorAfterRemoveSelected(#originalText - #newText)
     else
         newText = originalText:sub(0, self.selection.closing.pos) ..
@@ -174,26 +168,24 @@ function game:removeSelected()
 end
 
 function game:updateCursorAfterRemoveSelected(textLengthDiff)
-    local newPos = self.cursor.pos
-    if self.cursor.line == self.selection.closing.line then
-        newPos = newPos - textLengthDiff
-    end
-    self.cursor.pos = newPos
+    self.cursor.pos = self.cursor.pos - textLengthDiff
 end
 
 function game:removeSelOrCurr()
     if self.selection.start.pos == nil then
         self:removeCurrChar()
-    elseif love.keyboard.isDown("lshift") then
+    else
         self:removeSelected()
     end
 end
 
 function game:moveCursor(callback)
-    if love.keyboard.isDown("lshift") and self.selection.isMovingSelect then
+    local shiftIsDown = love.keyboard.isDown("lshift")
+
+    if shiftIsDown and self.selection.start.pos ~= nil then
         callback()
         game:updateSelectionEnd()
-    elseif love.keyboard.isDown("lshift") then
+    elseif shiftIsDown then
         game:initSelect()
         callback()
         game:updateSelectionEnd()

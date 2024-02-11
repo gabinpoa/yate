@@ -1,5 +1,5 @@
-local game = require "gameobj"
-local keymaps = require "keymaps"
+local game = require("gameobj")
+local keymaps = require("keymaps")
 
 function love.load()
     love.keyboard.setKeyRepeat(true)
@@ -16,8 +16,13 @@ function love.draw()
     love.graphics.line(game.cursor.x, game.cursor.y, game.cursor.x, game.cursor.y + game.lineHeight)
     if game.selection.start.pos ~= nil then
         love.graphics.setColor(0, 0, 255, 0.4)
-        love.graphics.rectangle("fill", game.selection.start.x, game.selection.start.y,
-            game.selection.closing.x - game.selection.start.x, game.lineHeight + 2)
+        love.graphics.rectangle(
+            "fill",
+            game.selection.start.x,
+            game.selection.start.y,
+            game.selection.closing.x - game.selection.start.x,
+            game.lineHeight + 2
+        )
     end
 end
 
@@ -25,14 +30,10 @@ function love.textinput(char)
     game:insertCharacter(char)
 end
 
-function love.keyreleased(key)
-    if key == "lshift" and game.selection.start.pos ~= nil and game.selection.isMovingSelect == true then
-        game:stopSelect()
-    end
-end
-
 function love.keypressed(key)
-    if keymaps[key] ~= nil then
+    if game.selection.start.pos ~= nil and not love.keyboard.isDown("lshift") and key ~= "backspace" then
+        game:exitSelect()
+    elseif keymaps[key] ~= nil then
         keymaps[key]()
     end
 end
