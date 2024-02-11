@@ -1,9 +1,7 @@
 local game = require "gameobj"
 local keymaps = {}
 
-function keymaps.backspace()
-    game:removeSelOrCurr()
-end
+-- cursor movements
 
 function keymaps.left()
     game:moveCursor(function()
@@ -39,6 +37,12 @@ function keymaps.home()
     game:moveCursor(function()
         game.cursor.pos = 0
     end)
+end
+
+-- text content interaction
+
+function keymaps.backspace()
+    game:removeSelOrCurr()
 end
 
 keymaps["return"] = function()
