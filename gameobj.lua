@@ -4,7 +4,16 @@ local game = {
         line = 1,
         x = 0,
         y = 0,
-        selStart = {
+    },
+    selection = {
+        isMovingSelect = false,
+        start = {
+            pos = nil,
+            line = nil,
+            x = 0,
+            y = 0,
+        },
+        closing = {
             pos = nil,
             line = nil,
             x = 0,
@@ -109,25 +118,89 @@ function game:insertCharacter(char)
     self:updateXYAxis()
 end
 
-function game:getSelectStartX()
-    return love.graphics.getFont():getWidth(self:getCurrLineText():sub(0, self.cursor.selStart.pos)) + self.padding
+function game:getSelectionX(extremity)
+    return love.graphics.getFont():getWidth(self.txt[self.selection[extremity].line]:sub(0, self.selection[extremity]
+            .pos)) +
+        self.padding
 end
 
-function game:getSelectStartY()
-    return (self.cursor.selStart.line - 1) * self.lineHeight + self.padding
+function game:getSelectionY(extremity)
+    return (self.selection[extremity].line - 1) * self.lineHeight + self.padding
+end
+
+function game:updateSelectionEnd()
+    self.selection.closing.pos = self.cursor.pos
+    self.selection.closing.line = self.cursor.line
+
+    self.selection.closing.x = self:getSelectionX("closing")
+    self.selection.closing.y = self:getSelectionY("closing")
 end
 
 function game:initSelect()
-    self.cursor.selStart.pos = self.cursor.pos
-    self.cursor.selStart.line = self.cursor.line
+    self.selection.isMovingSelect = true
 
-    self.cursor.selStart.x = self:getSelectStartX()
-    self.cursor.selStart.y = self:getSelectStartY()
+    self.selection.start.pos = self.cursor.pos
+    self.selection.start.line = self.cursor.line
+
+    self.selection.start.x = self:getSelectionX("start")
+    self.selection.start.y = self:getSelectionY("start")
+end
+
+function game:stopSelect()
+    self.selection.isMovingSelect = false
 end
 
 function game:exitSelect()
-    self.cursor.selStart.pos = nil
-    self.cursor.selStart.line = nil
+    self.selection.start.pos = nil
+    self.selection.start.line = nil
+    self.selection.closing.pos = nil
+    self.selection.closing.line = nil
+end
+
+function game:removeSelected()
+    local originalText = self.txt[self.selection.start.line]
+    local newText
+    if self.selection.start.pos < self.selection.closing.pos then
+        newText = originalText:sub(0, self.selection.start.pos) ..
+            originalText:sub(self.selection.closing.pos + 1)
+        self:updateCursorAfterRemoveSelected(#originalText - #newText)
+    else
+        newText = originalText:sub(0, self.selection.closing.pos) ..
+            originalText:sub(self.selection.start.pos + 1)
+    end
+    self.txt[self.selection.start.line] = newText
+    self:exitSelect()
+    self:updateXYAxis()
+end
+
+function game:updateCursorAfterRemoveSelected(textLengthDiff)
+    local newPos = self.cursor.pos
+    if self.cursor.line == self.selection.closing.line then
+        newPos = newPos - textLengthDiff
+    end
+    self.cursor.pos = newPos
+end
+
+function game:removeSelOrCurr()
+    if self.selection.start.pos == nil then
+        self:removeCurrChar()
+    else
+        self:removeSelected()
+    end
+end
+
+function game:moveCursor(callback)
+    if love.keyboard.isDown("lshift") and self.selection.isMovingSelect then
+        callback()
+        game:updateSelectionEnd()
+    elseif love.keyboard.isDown("lshift") then
+        game:initSelect()
+        callback()
+        game:updateSelectionEnd()
+    else
+        callback()
+    end
+    game:updateXYAxis()
 end
 
 return game

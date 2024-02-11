@@ -2,51 +2,43 @@ local game = require "gameobj"
 local keymaps = {}
 
 function keymaps.backspace()
-    game:removeCurrChar()
+    game:removeSelOrCurr()
 end
 
 function keymaps.left()
-    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
-        game:initSelect()
-    end
-    game:setCursorPos(-1)
+    game:moveCursor(function()
+        game:setCursorPos(-1)
+    end)
 end
 
 function keymaps.right()
-    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
-        game:initSelect()
-    end
-    game:setCursorPos(1)
+    game:moveCursor(function()
+        game:setCursorPos(1)
+    end)
 end
 
 function keymaps.up()
-    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
-        game:initSelect()
-    end
-    game:setCursorLine(-1)
+    game:moveCursor(function()
+        game:setCursorLine(-1)
+    end)
 end
 
 function keymaps.down()
-    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
-        game:initSelect()
-    end
-    game:setCursorLine(1)
+    game:moveCursor(function()
+        game:setCursorLine(1)
+    end)
 end
 
 keymaps["end"] = function()
-    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
-        game:initSelect()
-    end
-    game.cursor.pos = game:currLineLen()
-    game:updateXYAxis()
+    game:moveCursor(function()
+        game.cursor.pos = game:currLineLen()
+    end)
 end
 
 function keymaps.home()
-    if love.keyboard.isDown("lshift") and game.cursor.selStart.pos == nil then
-        game:initSelect()
-    end
-    game.cursor.pos = 0
-    game:updateXYAxis()
+    game:moveCursor(function()
+        game.cursor.pos = 0
+    end)
 end
 
 keymaps["return"] = function()
