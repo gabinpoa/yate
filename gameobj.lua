@@ -184,7 +184,7 @@ end
 function game:removeSelOrCurr()
     if self.selection.start.pos == nil then
         self:removeCurrChar()
-    else
+    elseif love.keyboard.isDown("lshift") then
         self:removeSelected()
     end
 end
