@@ -179,6 +179,70 @@ function game:removeSelOrCurr()
     end
 end
 
+function game:getLinesSelectedDiff()
+    return self.selection.closing.line - self.selection.start.line
+end
+
+function game:getFirstLastPosLine()
+    local diff = self:getLinesSelectedDiff()
+    local first, last = self.selection.start, self.selection.closing
+    if diff < 0 then
+        first, last = last, first
+        diff = diff * (-1)
+    end
+    return { lines = diff, first = first, last = last }
+end
+
+function game:getLineWidth(line)
+    return love.graphics.getFont():getWidth(self.txt[line])
+end
+
+function game:getLineEndX(line)
+    return love.graphics.getFont():getWidth(self.txt[line]) + self.padding
+end
+
+function game:drawSelection()
+    local selection = self:getFirstLastPosLine()
+
+    love.graphics.setColor(0, 10, 255, 0.4)
+
+    if selection.lines == 0 then
+        love.graphics.rectangle(
+            "fill",
+            selection.first.x,
+            selection.first.y,
+            selection.last.x - selection.first.x,
+            self.lineHeight
+        )
+    else
+        love.graphics.rectangle(
+            "fill",
+            selection.first.x,
+            selection.first.y,
+            self:getLineEndX(selection.first.line) - selection.first.x,
+            self.lineHeight
+        )
+        local counter = selection.lines
+        while counter > 1 do
+            love.graphics.rectangle(
+                "fill",
+                self.padding,
+                (selection.first.line + (selection.lines - counter + 1) - 1) * self.lineHeight + self.padding,
+                self:getLineWidth(selection.first.line + (selection.lines - counter + 1)),
+                self.lineHeight
+            )
+            counter = counter - 1
+        end
+        love.graphics.rectangle(
+            "fill",
+            selection.last.x,
+            selection.last.y,
+            self.padding - selection.last.x,
+            self.lineHeight
+        )
+    end
+end
+
 function game:moveCursor(callback)
     local shiftIsDown = love.keyboard.isDown("lshift")
 

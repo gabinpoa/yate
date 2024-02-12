@@ -15,14 +15,7 @@ function love.draw()
     love.graphics.print(table.concat(game.txt, "\n"), game.padding, game.padding)
     love.graphics.line(game.cursor.x, game.cursor.y, game.cursor.x, game.cursor.y + game.lineHeight)
     if game.selection.start.pos ~= nil then
-        love.graphics.setColor(0, 0, 255, 0.4)
-        love.graphics.rectangle(
-            "fill",
-            game.selection.start.x,
-            game.selection.start.y,
-            game.selection.closing.x - game.selection.start.x,
-            game.lineHeight + 2
-        )
+        game:drawSelection()
     end
 end
 
