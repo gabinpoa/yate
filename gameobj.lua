@@ -161,7 +161,9 @@ function game:removeSelected()
             table.remove(self.txt, selection.first.line + i)
             selection.last.line = selection.last.line - 1
         end
-        self.txt[selection.last.line] = self.txt[selection.last.line]:sub(selection.last.pos + 1)
+        self.txt[selection.first.line] = self.txt[selection.first.line] ..
+            self.txt[selection.last.line]:sub(selection.last.pos + 1)
+        table.remove(self.txt, selection.last.line)
         self.cursor.line = selection.first.line
         self.cursor.pos = selection.first.pos
         game:exitSelect()
