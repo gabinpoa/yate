@@ -151,6 +151,25 @@ function game:exitSelect()
 end
 
 function game:removeSelected()
+    local selection = self:getFirstLastPosLine()
+
+    if selection.lines == 0 then
+        game:removeOneLineSelected()
+    else
+        self.txt[selection.first.line] = self.txt[selection.first.line]:sub(0, selection.first.pos)
+        for i = 1, selection.lines - 1 do
+            table.remove(self.txt, selection.first.line + i)
+            selection.last.line = selection.last.line - 1
+        end
+        self.txt[selection.last.line] = self.txt[selection.last.line]:sub(selection.last.pos + 1)
+        self.cursor.line = selection.first.line
+        self.cursor.pos = selection.first.pos
+        game:exitSelect()
+        game:updateXYAxis()
+    end
+end
+
+function game:removeOneLineSelected()
     local originalText = self.txt[self.selection.start.line]
     local newText
     if self.selection.start.pos < self.selection.closing.pos then
