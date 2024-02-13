@@ -1,4 +1,5 @@
 local game = require "gameobj"
+local file = require "file"
 local keymaps = {}
 
 -- cursor movements
@@ -47,6 +48,14 @@ end
 
 keymaps["return"] = function()
     game:addNewLine()
+end
+
+-- filesystem interaction
+
+function keymaps.s()
+    if love.keyboard.isDown("lctrl") then
+        file:save(game.txt)
+    end
 end
 
 return keymaps

@@ -4,7 +4,17 @@ local file    = require("file")
 
 function love.load(args)
     local filePath = args[1]
-    game.txt = file.getFileTxtTable(filePath)
+    if filePath ~= nil then
+        file.filePath = filePath
+        game.txt = file:getFileTxtTable()
+    else
+        game.txt = {
+            "Please give the file path when calling the game",
+            "Ex:",
+            "love . /filePath/file.lua"
+        }
+        love.event.quit(2)
+    end
 
     love.keyboard.setKeyRepeat(true)
     love.graphics.setNewFont("JetBrainsMono-Regular.ttf", 14)
