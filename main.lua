@@ -1,7 +1,11 @@
-local game = require("gameobj")
+local game    = require("gameobj")
 local keymaps = require("keymaps")
+local file    = require("file")
 
-function love.load()
+function love.load(args)
+    local filePath = args[1]
+    game.txt = file.getFileTxtTable(filePath)
+
     love.keyboard.setKeyRepeat(true)
     love.graphics.setNewFont("JetBrainsMono-Regular.ttf", 14)
 

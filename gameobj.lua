@@ -19,10 +19,7 @@ local game = {
             y = 0,
         },
     },
-    txt = {
-        "hey guys",
-        "its me"
-    },
+    txt = {},
     padding = 0,
     lineHeight = 0,
 }
