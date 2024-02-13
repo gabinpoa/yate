@@ -6,4 +6,4 @@ To run it in your machine you need to get Love (from your distro repository or t
 
 - [x] Add multi-line selection
 - [x] Open text files
-- [ ] Save changes to file
+- [x] Save changes to file
