@@ -13,7 +13,6 @@ function love.load(args)
             "Ex:",
             "love . /filePath/file.lua"
         }
-        love.event.quit(2)
     end
 
     love.keyboard.setKeyRepeat(true)

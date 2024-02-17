@@ -3,13 +3,15 @@ local file = {
 }
 
 function file:getFileTxtTable()
-    local fileInfo = love.filesystem.getInfo(self.filePath, "file")
-    if fileInfo == nil then
+    local fileObj, err = io.open(self.filePath, "r")
+    if fileObj == nil then
         print("The given path either don't exists or is not a file")
-        love.event.quit(0)
+        print(err)
+        love.event.quit(1)
+        return { "" }
     else
         local newTxt = {}
-        for line in io.lines(self.filePath, "l") do
+        for line in fileObj:lines("*l") do
             if line ~= nil then
                 table.insert(newTxt, line)
             else
@@ -21,7 +23,10 @@ function file:getFileTxtTable()
 end
 
 function file:save(txt)
-    local fileToSave = io.open(self.filePath, "w")
+    local fileToSave, err = io.open(self.filePath, "w")
+    if err then
+        print(err)
+    end
 
     local newStringContent = table.concat(txt, "\n")
 
