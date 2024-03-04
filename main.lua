@@ -1,4 +1,4 @@
-local game    = require("gameobj")
+local game    = require("editorObject")
 local keymaps = require("keymaps")
 local file    = require("file")
 
@@ -20,12 +20,14 @@ function love.load(args)
 
     game.lineHeight = love.graphics.getFont():getHeight()
     game.padding = 12
+    love.window.setMode(game.window.height, game.window.width)
+    game:initWindow()
     game:updateXYAxis()
 end
 
 function love.draw()
     love.graphics.setColor(255, 255, 255)
-    love.graphics.print(table.concat(game.txt, "\n"), game.padding, game.padding)
+    game:displayTextLineByLine()
     love.graphics.line(game.cursor.x, game.cursor.y, game.cursor.x, game.cursor.y + game.lineHeight)
     if game.selection.start.pos ~= nil then
         game:drawSelection()

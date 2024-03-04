@@ -1,4 +1,4 @@
-local game = require "gameobj"
+local game = require "editorObject"
 local file = require "file"
 local keymaps = {}
 

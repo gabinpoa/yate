@@ -1,45 +1,25 @@
-local game = {
-    window = {
-        width = 800,
-        height = 800,
-        scrollY = 0,
-    },
-    cursor = {
-        pos = 0,
-        line = 1,
-        x = 0,
-        y = 0,
-    },
-    selection = {
-        start = {
-            pos = nil,
-            line = nil,
-            x = 0,
-            y = 0,
-        },
-        closing = {
-            pos = nil,
-            line = nil,
-            x = 0,
-            y = 0,
-        },
-    },
-    txt = {},
-    padding = 0,
-    lineHeight = 0,
-}
-
-table.unpack = table.unpack or unpack
+local game = require("editorObject.defaults")
 
 function game:initWindow()
     self.window.visibleLines = math.floor((self.window.height - (self.padding * 2)) / self.lineHeight)
     print(self.window.visibleLines)
+    self:initLimitLines()
     self:updateLimitLines()
 end
 
+function game:initLimitLines()
+    self.window.startLine = 1
+    self.window.endLine = self.window.visibleLines
+end
+
 function game:updateLimitLines()
-    self.window.startLine = math.max(1, self.cursor.line - self.window.visibleLines + 1)
-    self.window.endLine = math.min(#self.txt, self.window.startLine + self.window.visibleLines - 1)
+    if self.cursor.line > self.window.endLine then
+        self.window.startLine = math.max(1, self.cursor.line - self.window.visibleLines + 1)
+        self.window.endLine = math.min(#self.txt, self.window.startLine + self.window.visibleLines - 1)
+    elseif self.cursor.line < self.window.startLine then
+        self.window.startLine = math.max(1, self.cursor.line - self.window.visibleLines + 1)
+        self.window.endLine = math.min(#self.txt, self.window.startLine + self.window.visibleLines - 1)
+    end
 end
 
 function game:getVisibleText()
