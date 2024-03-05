@@ -12,6 +12,8 @@ function Editor:removeCurrChar()
         self.txt[self.cursor.line] = self:getCurrLineText() .. originalText
         table.remove(self.txt, originalLine)
     end
+    print(self.window.endLine .. " endLine " .. self.cursor.line)
+    print(self.window.startLine .. " endLine " .. self.window.visibleLines)
 end
 
 function Editor:addNewLine()

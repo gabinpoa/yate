@@ -39,14 +39,19 @@ end
 function Editor:setCursorLine(num)
     local newLine = self.cursor.line + num
     local newPos = self.cursor.pos
+
     if newLine < 1 or newLine > #self.txt then
         newLine = self.cursor.line
     end
+
     self.cursor.line = newLine
+
     if newPos > self:currLineLen() then
         newPos = self:currLineLen()
     end
+
     self.cursor.pos = newPos
+
     self:updateXYAxis()
     self:updateLimitLines()
 end

@@ -40,15 +40,20 @@ function Editor:removeSelected()
         Editor:removeOneLineSelected()
     else
         self.txt[selection.first.line] = self.txt[selection.first.line]:sub(0, selection.first.pos)
+
         for i = 1, selection.lines - 1 do
             table.remove(self.txt, selection.first.line + i)
             selection.last.line = selection.last.line - 1
         end
+
         self.txt[selection.first.line] = self.txt[selection.first.line] ..
             self.txt[selection.last.line]:sub(selection.last.pos + 1)
+
         table.remove(self.txt, selection.last.line)
+
         self:unsafeSetCursorLine(selection.first.line)
         self:unsafeSetCursorPos(selection.first.pos)
+
         Editor:exitSelect()
         Editor:updateXYAxis()
     end
