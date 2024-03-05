@@ -1,4 +1,4 @@
-return {
+Editor = {
     window = {
         width = 800,
         height = 800,
