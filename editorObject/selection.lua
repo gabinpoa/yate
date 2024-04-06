@@ -1,8 +1,9 @@
 require("editorObject.defaults")
 
 function Editor:getSelectionX(extremity)
-    return love.graphics.getFont():getWidth(self.txt[self.selection[extremity].line]:sub(0, self.selection[extremity]
-            .pos)) +
+    return love.graphics.getFont():getWidth(self.visibleText
+            [self.selection[extremity].line - self.window.startLine + 1]:sub(0, self.selection[extremity]
+                .pos - self.window.startPos + 1)) +
         self.padding
 end
 
@@ -51,8 +52,10 @@ function Editor:removeSelected()
 
         table.remove(self.txt, selection.last.line)
 
-        self:unsafeSetCursorLine(selection.first.line)
-        self:unsafeSetCursorPos(selection.first.pos)
+        self:moveCursor(function()
+            self:unsafeSetCursorLine(selection.first.line)
+            self:unsafeSetCursorPos(selection.first.pos)
+        end)
 
         Editor:exitSelect()
         Editor:updateXYAxis()
@@ -72,12 +75,16 @@ function Editor:removeOneLineSelected()
             originalText:sub(self.selection.start.pos + 1)
     end
     self.txt[self.selection.start.line] = newText
+    self:updateLimitLines()
     self:exitSelect()
     self:updateXYAxis()
 end
 
 function Editor:updateCursorAfterRemoveSelected(textLengthDiff)
-    self:unsafeSetCursorPos(self.cursor.pos - textLengthDiff)
+    self:moveCursor(function()
+        self:unsafeSetCursorPos(self.cursor.pos - textLengthDiff)
+    end
+    )
 end
 
 function Editor:getLinesSelectedDiff()

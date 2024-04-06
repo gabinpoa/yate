@@ -14,12 +14,19 @@ end
 function Editor:updateLimitLines()
     if self.cursor.line > self.window.endLine then
         self.window.startLine = math.max(1, self.cursor.line - self.window.visibleLines + 1)
-        self.window.endLine = math.min(#self.txt, self.window.startLine + self.window.visibleLines - 1)
+        self.window.endLine = self.cursor.line
     elseif self.cursor.line < self.window.startLine then
-        self.window.startLine = math.max(1, self.cursor.line - self.window.visibleLines + 1)
-        self.window.endLine = math.min(#self.txt, self.window.startLine + self.window.visibleLines - 1)
+        self.window.startLine = self.cursor.line
+        self.window.endLine = self.window.startLine + self.window.visibleLines - 1
+    end
+    if self.cursor.pos > self.window.startPos + self.window.visibleChars - 1 then
+        self.window.startPos = self.cursor.pos - self.window.visibleChars + 1
+    elseif self.cursor.pos < self.window.startPos then
+        self.window.startPos = self.cursor.pos + 1
     end
     self.window.visibleLines = self.window.endLine - self.window.startLine + 1
+
+    self.visibleText = self:getVisibleText()
 end
 
 function Editor:getVisibleText()
@@ -27,11 +34,11 @@ function Editor:getVisibleText()
 
     for index, value in ipairs(self.txt) do
         if index >= self.window.startLine and index <= self.window.endLine then
-            table.insert(txt, value)
+            table.insert(txt, value:sub(self.window.startPos, self.window.startPos + self.window.visibleChars - 1))
         end
     end
 
-    return table.concat(txt, "\n")
+    return txt
 end
 
 function Editor:getLineWidth(line)
@@ -43,7 +50,7 @@ function Editor:getLineEndX(line)
 end
 
 function Editor:displayTextLineByLine()
-    for i, line in pairs(self.txt) do
+    for i, line in pairs(self.visibleText) do
         if #line > 0 then
             local lineColor = { 1, 1, 1 }
 
@@ -52,7 +59,7 @@ function Editor:displayTextLineByLine()
             end
 
             love.graphics.setColor(lineColor)
-            love.graphics.print(line, self.padding, self.padding + ((i - self.window.startLine) * self.lineHeight))
+            love.graphics.print(line, self.padding, self.padding + ((i - 1) * self.lineHeight))
         end
     end
 end

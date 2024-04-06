@@ -4,8 +4,13 @@ function Editor:getCurrLineText()
     return self.txt[self.cursor.line]
 end
 
+function Editor:getLineText(line)
+    return self.txt[line]
+end
+
 function Editor:getCursorX()
-    return love.graphics.getFont():getWidth(self.txt[self.cursor.line]:sub(0, self.cursor.pos)) + self.padding
+    return love.graphics.getFont():getWidth(string.sub(self.visibleText[self.cursor.line - self.window.startLine + 1],
+        1, self.cursor.pos - self.window.startPos + 1)) + self.padding
 end
 
 function Editor:getCursorY()
@@ -15,6 +20,10 @@ end
 function Editor:updateXYAxis()
     self.cursor.x = self:getCursorX()
     self.cursor.y = self:getCursorY()
+end
+
+function Editor:getCursorXYAxis()
+    return self:getCursorX(), self:getCursorY()
 end
 
 function Editor:setCursorPos(num)
@@ -28,12 +37,10 @@ function Editor:setCursorPos(num)
     end
     self.cursor.pos = newPos
     self:updateXYAxis()
-    self:updateLimitLines()
 end
 
 function Editor:unsafeSetCursorPos(pos)
     self.cursor.pos = pos
-    self:updateLimitLines()
 end
 
 function Editor:setCursorLine(num)
@@ -53,12 +60,10 @@ function Editor:setCursorLine(num)
     self.cursor.pos = newPos
 
     self:updateXYAxis()
-    self:updateLimitLines()
 end
 
 function Editor:unsafeSetCursorLine(line)
     self.cursor.line = line
-    self:updateLimitLines()
 end
 
 function Editor:moveCursor(callback)
@@ -66,13 +71,14 @@ function Editor:moveCursor(callback)
 
     if shiftIsDown and self.selection.start.pos ~= nil then
         callback()
-        Editor:updateSelectionEnd()
+        self:updateSelectionEnd()
     elseif shiftIsDown then
-        Editor:initSelect()
+        self:initSelect()
         callback()
-        Editor:updateSelectionEnd()
+        self:updateSelectionEnd()
     else
         callback()
     end
-    Editor:updateXYAxis()
+    self:updateLimitLines()
+    self:updateXYAxis()
 end

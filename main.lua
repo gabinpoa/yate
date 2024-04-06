@@ -16,6 +16,10 @@ function love.load(args)
             Editor.lineHeight = love.graphics.getFont():getHeight()
             Editor.padding = 12
             love.window.setMode(Editor.window.height, Editor.window.width)
+            do
+                local width = Editor.window.width
+                Editor.window.visibleChars = (width - (Editor.padding * 2)) / love.graphics.getFont():getWidth("a")
+            end
             Editor:initWindow()
             Editor:updateXYAxis()
         end

@@ -5,6 +5,8 @@ Editor = {
         startLine = 1,
         endLine = 1,
         visibleLines = 1,
+        visibleChars = 0,
+        startPos = 1,
     },
     cursor = {
         pos = 0,

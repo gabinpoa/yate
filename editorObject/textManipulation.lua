@@ -4,16 +4,22 @@ function Editor:removeCurrChar()
     local originalText = self:getCurrLineText()
     local originalLine = self.cursor.line
     local originalPos = self.cursor.pos
+    local newPos
+    local newLine
     if originalPos > 0 then
-        self:setCursorPos(-1)
         self.txt[originalLine] = originalText:sub(0, originalPos - 1) .. originalText:sub(originalPos + 1)
+        newPos = originalPos - 1
+        newLine = originalLine
     elseif originalLine > 1 then
-        self:setCursorPos(-1)
-        self.txt[self.cursor.line] = self:getCurrLineText() .. originalText
+        newPos = self:getSomeLineLen(originalLine - 1)
+        newLine = originalLine - 1
+        self.txt[originalLine - 1] = self:getLineText(originalLine - 1) .. originalText
         table.remove(self.txt, originalLine)
     end
-    print(self.window.endLine .. " endLine " .. self.cursor.line)
-    print(self.window.startLine .. " endLine " .. self.window.visibleLines)
+    self:moveCursor(function()
+        self:unsafeSetCursorPos(newPos)
+        self:unsafeSetCursorLine(newLine)
+    end)
 end
 
 function Editor:addNewLine()
@@ -29,8 +35,10 @@ function Editor:addNewLine()
         end
     end)()
     table.insert(self.txt, self.cursor.line + 1, newLineText)
-    self:unsafeSetCursorPos(0)
-    self:unsafeSetCursorLine(self.cursor.line + 1)
+    self:moveCursor(function()
+        self:unsafeSetCursorPos(0)
+        self:unsafeSetCursorLine(self.cursor.line + 1)
+    end)
     self:updateXYAxis()
 end
 
@@ -39,7 +47,9 @@ function Editor:insertCharacter(char)
     local newText = originalText:sub(0, self.cursor.pos) .. char .. originalText:sub(self.cursor.pos + 1)
 
     self.txt[self.cursor.line] = newText
-    self:unsafeSetCursorPos(self.cursor.pos + 1)
+    self:moveCursor(function()
+        self:unsafeSetCursorPos(self.cursor.pos + 1)
+    end)
     self:updateXYAxis()
 end
 
